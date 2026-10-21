@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>환경호르몬 줄이기 대작전! - 인터랙티브 스티커북</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gaegu:wght@400;700&family=Nanum+Gothic:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Nanum Gothic', sans-serif; background-color: #fdfbf7; }
+        .font-hand { font-family: 'Gaegu', cursive; }
+        .sticker-active { ring: 4px solid #fbbf24; transform: scale(1.05); background-color: #fffbeb; }
+        .category-card { transition: all 0.3s ease; }
+        .category-card:hover { transform: translateY(-5px); }
+        /* 스크롤바 디자인 */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #d6ccc2; border-radius: 10px; }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+    <header class="max-w-7xl mx-auto text-center mb-8">
+        <h1 class="text-4xl md:text-6xl font-bold font-hand text-amber-900 mb-4">🌿 환경호르몬 줄이기 대작전! 스티커북</h1>
+        <div class="bg-white border-2 border-amber-200 rounded-2xl py-3 px-6 inline-block shadow-sm">
+            <p class="text-amber-800 font-medium">방법: 왼쪽에서 스티커를 <span class="font-bold underline">선택</span>하고, 알맞은 <span class="font-bold underline">카테고리 상자</span>를 눌러주세요!</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <section class="lg:col-span-4 bg-white rounded-3xl border-4 border-dashed border-stone-300 p-5 shadow-inner">
+            <div class="flex justify-between items-center mb-4 border-b-2 border-stone-100 pb-2">
+                <h2 class="text-2xl font-bold font-hand text-stone-700">🎒 스티커 가방</h2>
+                <span id="sticker-count" class="bg-stone-200 text-stone-700 px-3 py-1 rounded-full text-sm font-bold">남은 개수: 33개</span>
+            </div>
+            <div id="sticker-bin" class="grid grid-cols-2 gap-3 overflow-y-auto h-[550px] pr-2">
+                </div>
+        </section>
+
+        <section class="lg:col-span-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <div id="zone-avoid" onclick="matchSticker('avoid')" class="category-card cursor-pointer bg-sky-50 border-4 border-sky-200 rounded-3xl p-5 flex flex-col h-full shadow-sm">
+                <div class="text-center mb-4">
+                    <span class="text-4xl">🚫</span>
+                    <h3 class="text-3xl font-bold font-hand text-sky-900 mt-2">회피하기 (Avoid)</h3>
+                    <p class="text-xs text-sky-600 font-bold mt-1">유해 제품 사용 피하기</p>
+                </div>
+                <div id="slots-avoid" class="bg-white/50 rounded-2xl p-3 flex-1 flex flex-wrap gap-2 content-start min-h-[400px]"></div>
+            </div>
+
+            <div id="zone-remove" onclick="matchSticker('remove')" class="category-card cursor-pointer bg-emerald-50 border-4 border-emerald-200 rounded-3xl p-5 flex flex-col h-full shadow-sm">
+                <div class="text-center mb-4">
+                    <span class="text-4xl">🧼</span>
+                    <h3 class="text-3xl font-bold font-hand text-emerald-900 mt-2">제거하기 (Remove)</h3>
+                    <p class="text-xs text-emerald-600 font-bold mt-1">몸과 주변 유해물질 없애기</p>
+                </div>
+                <div id="slots-remove" class="bg-white/50 rounded-2xl p-3 flex-1 flex flex-wrap gap-2 content-start min-h-[400px]"></div>
+            </div>
+
+            <div id="zone-expel" onclick="matchSticker('expel')" class="category-card cursor-pointer bg-purple-50 border-4 border-purple-200 rounded-3xl p-5 flex flex-col h-full shadow-sm">
+                <div class="text-center mb-4">
+                    <span class="text-4xl">🌊</span>
+                    <h3 class="text-3xl font-bold font-hand text-purple-900 mt-2">배출하기 (Expel)</h3>
+                    <p class="text-xs text-purple-600 font-bold mt-1">땀과 소변으로 내보내기</p>
+                </div>
+                <div id="slots-expel" class="bg-white/50 rounded-2xl p-3 flex-1 flex flex-wrap gap-2 content-start min-h-[400px]"></div>
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="max-w-7xl mx-auto text-center mt-8">
+        <button onclick="window.location.reload()" class="bg-stone-700 text-white px-8 py-3 rounded-2xl font-bold hover:bg-stone-800 transition shadow-lg">🔄 처음부터 다시 시작</button>
+    </footer>
+
+    <div id="success-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl border-8 border-amber-300">
+            <div class="text-7xl mb-4">🎉</div>
+            <h2 class="text-4xl font-bold font-hand text-amber-900 mb-2">미션 대성공!</h2>
+            <p class="text-stone-600 mb-6">33가지의 모든 실천 수칙을 마스터했습니다.<br>이제 환경호르몬으로부터 우리 몸을 지켜요!</p>
+            <button onclick="document.getElementById('success-modal').style.display='none'" class="bg-amber-500 text-white px-10 py-3 rounded-full font-bold text-xl hover:bg-amber-600 transition">활동 마칠래요</button>
+        </div>
+    </div>
+
+    <script>
+        // 요청하신 33가지 데이터 분류 로직
+        const stickers = [
+            { id: 1, name: "모기채 사용", cat: "avoid", icon: "🏸" },
+            { id: 2, name: "천연살충제", cat: "avoid", icon: "🌿" },
+            { id: 3, name: "모기장", cat: "avoid", icon: "⛺" },
+            { id: 4, name: "나무그릇", cat: "avoid", icon: "🥣" },
+            { id: 5, name: "지방 떼고 먹기", cat: "avoid", icon: "🥩" },
+            { id: 6, name: "운동(땀흘리기)", cat: "expel", icon: "🏃" },
+            { id: 7, name: "손씻기", cat: "remove", icon: "🧼" },
+            { id: 8, name: "물마시기", cat: "expel", icon: "🥛" },
+            { id: 9, name: "녹차 마시기", cat: "expel", icon: "🍵" },
+            { id: 10, name: "고구마 먹기", cat: "expel", icon: "🍠" },
+            { id: 11, name: "당근 먹기", cat: "expel", icon: "🥕" },
+            { id: 12, name: "잡곡 먹기", cat: "expel", icon: "🍚" },
+            { id: 13, name: "유리잔 사용", cat: "avoid", icon: "🍷" },
+            { id: 14, name: "마늘 먹기", cat: "expel", icon: "🧄" },
+            { id: 15, name: "양파 먹기", cat: "expel", icon: "🧅" },
+            { id: 16, name: "텀블러 사용", cat: "avoid", icon: "🥤" },
+            { id: 17, name: "환기 자주하기", cat: "remove", icon: "🪟" },
+            { id: 18, name: "영수증 피하기", cat: "avoid", icon: "🧾" },
+            { id: 19, name: "마스크 쓰기", cat: "avoid", icon: "😷" },
+            { id: 20, name: "에코백 사용", cat: "avoid", icon: "🛍️" },
+            { id: 21, name: "재활용하기", cat: "avoid", icon: "♻️" },
+            { id: 22, name: "유기농생리대", cat: "avoid", icon: "🩹" },
+            { id: 23, name: "공기정화식물", cat: "remove", icon: "🪴" },
+            { id: 24, name: "공기청정기", cat: "remove", icon: "🌀" },
+            { id: 25, name: "건전지 주의", cat: "avoid", icon: "🔋" },
+            { id: 26, name: "유기가공식품", cat: "avoid", icon: "🍎" },
+            { id: 27, name: "청소하기", cat: "remove", icon: "🧹" },
+            { id: 28, name: "종이빨대 쓰기", cat: "avoid", icon: "🥤" },
+            { id: 29, name: "무농약 식품", cat: "avoid", icon: "🥬" },
+            { id: 30, name: "버스 타기", cat: "avoid", icon: "🚌" },
+            { id: 31, name: "천연세제 사용", cat: "avoid", icon: "🧴" },
+            { id: 32, name: "천연샴푸 사용", cat: "avoid", icon: "🧴" },
+            { id: 33, name: "플로깅하기", cat: "remove", icon: "🏃‍♂️" }
+        ];
+
+        let selectedStickerId = null;
+        let matchedCount = 0;
+
+        // 초기 스티커 렌더링
+        function init() {
+            const bin = document.getElementById('sticker-bin');
+            stickers.forEach(s => {
+                const div = document.createElement('div');
+                div.id = `sticker-${s.id}`;
+                div.className = "sticker bg-white border-2 border-stone-200 rounded-xl p-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition shadow-sm";
+                div.onclick = (e) => selectSticker(e, s.id);
+                div.innerHTML = `<span class="text-3xl mb-1">${s.icon}</span><span class="text-xs font-bold text-stone-700">${s.name}</span>`;
+                bin.appendChild(div);
+            });
+        }
+
+        // 스티커 선택
+        function selectSticker(e, id) {
+            e.stopPropagation();
+            if (selectedStickerId) {
+                document.getElementById(`sticker-${selectedStickerId}`).classList.remove('sticker-active');
+            }
+            selectedStickerId = id;
+            document.getElementById(`sticker-${id}`).classList.add('sticker-active');
+        }
+
+        // 카테고리 클릭 및 매칭
+        function matchSticker(targetCat) {
+            if (!selectedStickerId) return;
+
+            const stickerData = stickers.find(s => s.id === selectedStickerId);
+            
+            if (stickerData.cat === targetCat) {
+                // 정답 로직
+                const targetSlot = document.getElementById(`slots-${targetCat}`);
+                const original = document.getElementById(`sticker-${selectedStickerId}`);
+                
+                // 해당 카테고리로 이동
+                const clone = original.cloneNode(true);
+                clone.classList.remove('sticker-active', 'cursor-pointer', 'hover:shadow-md');
+                clone.style.width = "75px";
+                clone.style.fontSize = "10px";
+                clone.onclick = null;
+                
+                targetSlot.appendChild(clone);
+                original.remove();
+                
+                selectedStickerId = null;
+                matchedCount++;
+                document.getElementById('sticker-count').innerText = `남은 개수: ${33 - matchedCount}개`;
+
+                if (matchedCount === 33) {
+                    const modal = document.getElementById('success-modal');
+                    modal.style.display = 'flex';
+                }
+            } else {
+                // 오답 로직: 흔들리는 애니메이션
+                const zone = document.getElementById(`zone-${targetCat}`);
+                zone.classList.add('bg-red-200');
+                setTimeout(() => zone.classList.remove('bg-red-200'), 200);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
